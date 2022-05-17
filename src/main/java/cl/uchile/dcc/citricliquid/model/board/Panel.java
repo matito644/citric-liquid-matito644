@@ -17,6 +17,13 @@ public class Panel {
   private final Set<Panel> nextPanels = new HashSet<>();
 
   /**
+   * Creates a Neutral panel if no parameters were given
+   */
+  public Panel() {
+    this(PanelType.NEUTRAL);
+  }
+
+  /**
    * Creates a new panel.
    *
    * @param type the type of the panel.
@@ -71,13 +78,29 @@ public class Panel {
   }
 
   /**
+   * Executes the norma check process
+   * @param player the player we are interested in
+   */
+  public void normaCheck(final @NotNull Player player) {
+    int level = player.getNormaLevel();
+    int stars = player.getStars();
+    if ((level == 1 && stars == 10) || (level == 2 && stars == 30) || (level == 3 && stars == 70) ||
+            (level == 4 && stars == 120) || (level == 5 && stars == 200)) {
+      player.normaClear();
+    }
+  }
+
+  /**
    * Executes the appropriate action to the player according to this panel's type.
    */
   public void activatedBy(final Player player) {
     switch (type) {
       case BONUS -> applyBonusTo(player);
       case DROP -> applyDropTo(player);
-      case HOME -> applyHealTo(player);
+      case HOME -> {
+        applyHealTo(player);
+        normaCheck(player);
+      }
       default -> {
       }
     }

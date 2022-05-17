@@ -28,6 +28,7 @@ class PanelTest {
   private Panel testDropPanel;
   private Panel testEncounterPanel;
   private Panel testBossPanel;
+  private Panel testPanel;
   private Player suguri;
   private long testSeed;
 
@@ -39,6 +40,7 @@ class PanelTest {
     testEncounterPanel = new Panel(PanelType.ENCOUNTER);
     testHomePanel = new Panel(PanelType.HOME);
     testNeutralPanel = new Panel(PanelType.NEUTRAL);
+    testPanel = new Panel();
     testSeed = new Random().nextLong();
     suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
   }
@@ -51,6 +53,7 @@ class PanelTest {
     assertEquals(PanelType.ENCOUNTER, testEncounterPanel.getType());
     assertEquals(PanelType.HOME, testHomePanel.getType());
     assertEquals(PanelType.NEUTRAL, testNeutralPanel.getType());
+    assertEquals(PanelType.NEUTRAL, testPanel.getType());
   }
 
   @Test
@@ -81,6 +84,11 @@ class PanelTest {
     suguri.setCurrentHp(1);
     testHomePanel.activatedBy(suguri);
     assertEquals(2, suguri.getCurrentHp());
+
+    //test normaCheck
+    suguri.increaseStarsBy(10);
+    testHomePanel.activatedBy(suguri);
+    assertEquals(2, suguri.getNormaLevel());
   }
 
   @Test

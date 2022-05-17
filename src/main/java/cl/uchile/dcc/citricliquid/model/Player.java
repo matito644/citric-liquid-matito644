@@ -123,7 +123,7 @@ public class Player {
    * Performs a norma clear action; the {@code norma} counter increases in 1.
    */
   public void normaClear() {
-    normaLevel++;
+    if (normaLevel <= 5) {normaLevel++;}
   }
 
   /**
