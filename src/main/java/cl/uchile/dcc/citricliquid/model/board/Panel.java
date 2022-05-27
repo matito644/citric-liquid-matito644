@@ -1,8 +1,10 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.Player;
+import cl.uchile.dcc.citricliquid.model.*;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public class Panel {
   private final PanelType type;
   private final Set<Panel> nextPanels = new HashSet<>();
+
 
   /**
    * Creates a Neutral panel if no parameters were given
@@ -84,8 +87,8 @@ public class Panel {
   public void normaCheck(final @NotNull Player player) {
     int level = player.getNormaLevel();
     int stars = player.getStars();
-    if ((level == 1 && stars == 10) || (level == 2 && stars == 30) || (level == 3 && stars == 70) ||
-            (level == 4 && stars == 120) || (level == 5 && stars == 200)) {
+    if ((level == 1 && stars >= 10) || (level == 2 && stars >= 30) || (level == 3 && stars >= 70) ||
+            (level == 4 && stars >= 120) || (level == 5 && stars >= 200)) {
       player.normaClear();
     }
   }
@@ -93,7 +96,7 @@ public class Panel {
   /**
    * Executes the appropriate action to the player according to this panel's type.
    */
-  public void activatedBy(final Player player) {
+  public void activatedBy(final Player player, final WildUnit wild, final BossUnit boss) {
     switch (type) {
       case BONUS -> applyBonusTo(player);
       case DROP -> applyDropTo(player);
@@ -101,8 +104,22 @@ public class Panel {
         applyHealTo(player);
         normaCheck(player);
       }
+      case ENCOUNTER -> {
+        player.attack(wild);
+        if (wild.isAlive()) {
+          wild.attack(player);
+        }
+      }
+      case BOSS -> {
+        player.attack(boss);
+        if (boss.isAlive()) {
+          boss.attack(player);
+        }
+      }
       default -> {
       }
     }
   }
+
+
 }
