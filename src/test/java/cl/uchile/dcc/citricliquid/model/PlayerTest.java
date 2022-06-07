@@ -53,6 +53,11 @@ public class PlayerTest {
   public void normaClearTest() {
     suguri.normaClear();
     Assertions.assertEquals(2, suguri.getNormaLevel());
+    // make sure that normaLevel is not more than 6
+    for (int j = 0; j < 10; j++) {
+      suguri.normaClear();
+    }
+    Assertions.assertEquals(6, suguri.getNormaLevel());
   }
 
   @Test

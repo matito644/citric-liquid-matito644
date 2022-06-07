@@ -3,55 +3,30 @@ package cl.uchile.dcc.citricliquid.model.board;
 import cl.uchile.dcc.citricliquid.model.Player;
 import java.util.HashSet;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+
 
 /**
- * Class that represents a panel in the board of the game.
- *
- * @author <a href="mailto:ignacio.slater@ug.uchile.cl">Ignacio Slater Muñoz</a>.
- * @version 1.1.222804
- * @since 1.0
+ * Class that represents a neutral panel in the board of the game.
  */
 public class Panel {
   private final PanelType type;
   private final Set<Panel> nextPanels = new HashSet<>();
+  private final Set<Player> playersHere = new HashSet<>();
+
+  /**
+   * Creates a panel if no parameters were given.
+   */
+  public Panel() {
+    this(PanelType.NEUTRAL);
+  }
 
   /**
    * Creates a new panel.
    *
    * @param type the type of the panel.
    */
-  public Panel(final PanelType type) {
+  public Panel(PanelType type) {
     this.type = type;
-  }
-
-  /**
-   * Restores a player's HP in 1.
-   */
-  private static void applyHealTo(final @NotNull Player player) {
-    player.setCurrentHp(player.getCurrentHp() + 1);
-  }
-
-  /**
-   * Reduces the player's star count by the D6 roll multiplied by the player's norma level.
-   */
-  private static void applyDropTo(final @NotNull Player player) {
-    player.reduceStarsBy(player.roll() * player.getNormaLevel());
-  }
-
-  /**
-   * Reduces the player's star count by the D6 roll multiplied by the maximum between the player's
-   * norma level and three.
-   */
-  private static void applyBonusTo(final @NotNull Player player) {
-    player.increaseStarsBy(player.roll() * Math.min(player.getNormaLevel(), 3));
-  }
-
-  /**
-   * Returns the type of this panel.
-   */
-  public PanelType getType() {
-    return type;
   }
 
   /**
@@ -71,15 +46,9 @@ public class Panel {
   }
 
   /**
-   * Executes the appropriate action to the player according to this panel's type.
+   * Returns the type of this panel.
    */
-  public void activatedBy(final Player player) {
-    switch (type) {
-      case BONUS -> applyBonusTo(player);
-      case DROP -> applyDropTo(player);
-      case HOME -> applyHealTo(player);
-      default -> {
-      }
-    }
+  public PanelType getType() {
+    return type;
   }
 }

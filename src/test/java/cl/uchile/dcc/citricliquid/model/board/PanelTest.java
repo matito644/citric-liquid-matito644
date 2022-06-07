@@ -1,8 +1,7 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.Player;
+import cl.uchile.dcc.citricliquid.model.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -22,23 +21,25 @@ class PanelTest {
   private final static int BASE_ATK = 1;
   private final static int BASE_DEF = -1;
   private final static int BASE_EVD = 2;
-  private Panel testHomePanel;
   private Panel testNeutralPanel;
-  private Panel testBonusPanel;
-  private Panel testDropPanel;
-  private Panel testEncounterPanel;
-  private Panel testBossPanel;
-  private Player suguri;
-  private long testSeed;
+  private Panel testPanel;
+  protected HomePanel testHomePanel;
+  protected BonusPanel testBonusPanel;
+  protected DropPanel testDropPanel;
+  protected EncounterPanel testEncounterPanel;
+  protected BossPanel testBossPanel;
+  protected Player suguri;
+  protected long testSeed;
 
   @BeforeEach
   public void setUp() {
-    testBonusPanel = new Panel(PanelType.BONUS);
-    testBossPanel = new Panel(PanelType.BOSS);
-    testDropPanel = new Panel(PanelType.DROP);
-    testEncounterPanel = new Panel(PanelType.ENCOUNTER);
-    testHomePanel = new Panel(PanelType.HOME);
-    testNeutralPanel = new Panel(PanelType.NEUTRAL);
+    testBonusPanel = new BonusPanel();
+    testBossPanel = new BossPanel();
+    testDropPanel = new DropPanel();
+    testEncounterPanel = new EncounterPanel();
+    testHomePanel = new HomePanel();
+    testNeutralPanel = new Panel();
+    testPanel = new Panel();
     testSeed = new Random().nextLong();
     suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
   }
@@ -51,6 +52,7 @@ class PanelTest {
     assertEquals(PanelType.ENCOUNTER, testEncounterPanel.getType());
     assertEquals(PanelType.HOME, testHomePanel.getType());
     assertEquals(PanelType.NEUTRAL, testNeutralPanel.getType());
+    assertEquals(PanelType.NEUTRAL, testPanel.getType());
   }
 
   @Test
@@ -71,57 +73,4 @@ class PanelTest {
     assertEquals(Set.of(expectedPanel1, expectedPanel2),
                  testNeutralPanel.getNextPanels());
   }
-
-  @Test
-  public void homePanelTest() {
-    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
-    testHomePanel.activatedBy(suguri);
-    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
-
-    suguri.setCurrentHp(1);
-    testHomePanel.activatedBy(suguri);
-    assertEquals(2, suguri.getCurrentHp());
-  }
-
-  @Test
-  public void neutralPanelTest() {
-    final var expectedSuguri = suguri.copy();
-    testNeutralPanel.activatedBy(suguri);
-    assertEquals(expectedSuguri, suguri);
-  }
-
-  // region : Consistency tests
-  @RepeatedTest(100)
-  public void bonusPanelConsistencyTest() {
-    int expectedStars = 0;
-    assertEquals(expectedStars, suguri.getStars());
-    final var testRandom = new Random(testSeed);
-    suguri.setSeed(testSeed);
-    for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
-      final int roll = testRandom.nextInt(6) + 1;
-      testBonusPanel.activatedBy(suguri);
-      expectedStars += roll * Math.min(3, normaLvl);
-      assertEquals(expectedStars, suguri.getStars(),
-                   "Test failed with seed: " + testSeed);
-      suguri.normaClear();
-    }
-  }
-
-  @RepeatedTest(100)
-  public void dropPanelConsistencyTest() {
-    int expectedStars = 30;
-    suguri.increaseStarsBy(30);
-    assertEquals(expectedStars, suguri.getStars());
-    final var testRandom = new Random(testSeed);
-    suguri.setSeed(testSeed);
-    for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
-      final int roll = testRandom.nextInt(6) + 1;
-      testDropPanel.activatedBy(suguri);
-      expectedStars = Math.max(expectedStars - roll * normaLvl, 0);
-      assertEquals(expectedStars, suguri.getStars(),
-                   "Test failed with seed: " + testSeed);
-      suguri.normaClear();
-    }
-  }
-  // endregion
 }
