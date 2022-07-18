@@ -1,16 +1,17 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class that represents a neutral panel in the board of the game.
  */
-public class Panel {
+public class Panel implements Ipanel {
   private final PanelType type;
-  private final Set<Panel> nextPanels = new HashSet<>();
+  private final Set<Ipanel> nextPanels = new HashSet<>();
   private final Set<Player> playersHere = new HashSet<>();
 
   /**
@@ -29,26 +30,54 @@ public class Panel {
     this.type = type;
   }
 
-  /**
-   * Returns a copy of this panel's next ones.
-   */
-  public Set<Panel> getNextPanels() {
+
+  @Override
+  public Set<Ipanel> getNextPanels() {
     return Set.copyOf(nextPanels);
   }
 
-  /**
-   * Adds a new adjacent panel to this one.
-   *
-   * @param panel the panel to be added.
-   */
-  public void addNextPanel(final Panel panel) {
+  @Override
+  public void addNextPanel(final Ipanel panel) {
     nextPanels.add(panel);
   }
 
-  /**
-   * Returns the type of this panel.
-   */
+  @Override
   public PanelType getType() {
     return type;
+  }
+
+  @Override
+  public Set<Player> getPlayersHere() {
+    return Set.copyOf(playersHere);
+  }
+
+  @Override
+  public void addPlayer(Player player) {
+    playersHere.add(player);
+  }
+
+  @Override
+  public void removePlayer(Player player) {
+    playersHere.remove(player);
+  }
+
+  /**
+   * Does nothing because this is a neutral panel.
+   *
+   * @param player the one who is on the panel.
+   */
+  @Override
+  public void activatedBy(final @NotNull Player player) {
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Panel panel)) {
+      return false;
+    }
+    return type == panel.type && Objects.equals(nextPanels, panel.nextPanels);
   }
 }

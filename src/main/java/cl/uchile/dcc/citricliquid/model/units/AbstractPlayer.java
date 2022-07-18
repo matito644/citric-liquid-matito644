@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model;
+package cl.uchile.dcc.citricliquid.model.units;
 
 
 import java.util.Objects;

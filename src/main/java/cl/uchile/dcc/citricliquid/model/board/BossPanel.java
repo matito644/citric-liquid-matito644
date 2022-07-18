@@ -1,8 +1,8 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.BossUnit;
-import cl.uchile.dcc.citricliquid.model.BossUnitType;
-import cl.uchile.dcc.citricliquid.model.Player;
+import cl.uchile.dcc.citricliquid.model.units.BossUnit;
+import cl.uchile.dcc.citricliquid.model.units.BossUnitType;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -64,5 +64,4 @@ public class BossPanel extends Panel {
       bossUnitInThisPanel.attack(player);
     }
   }
-
 }

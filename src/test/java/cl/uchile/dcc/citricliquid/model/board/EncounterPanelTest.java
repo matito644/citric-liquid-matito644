@@ -1,7 +1,7 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.Player;
-import cl.uchile.dcc.citricliquid.model.WildUnit;
+import cl.uchile.dcc.citricliquid.model.units.Player;
+import cl.uchile.dcc.citricliquid.model.units.WildUnit;
 import org.junit.jupiter.api.RepeatedTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

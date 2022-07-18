@@ -37,3 +37,21 @@ al `atk` del jugador que está atacando, en un escenario real habría que ajusta
 - La variable `playersHere` en la clase `Panel`, será de utilidad en una simulación del juego para
 saber los jugadores que están parados en dicho panel.
 
+### Controller
+El controlador es capaz de crear personajes, rivales, paneles, definir el home panel de un
+jugador, saber cuando un jugador llega a la norma máxima, asignarle a cada panel
+uno o más paneles siguientes, obtener todos los paneles del tablero, 
+obtener el capítulo del juego, el turno y el jugador que está jugando, además de poder dejar a otro jugador como el que comienza su turno.
+
+
+La forma en que se manejan los turnos (`nextTurn()`) es similar a una cola de prioridad, ya que se tiene una lista con todos los 
+personajes y se procede a añadir al jugador actual al final de la lista, se quita el mismo y luego el jugador actual pasa a ser el que antes estaba en la segunda posición.
+Es decir, se va haciendo un ciclo en que siempre el jugador dueño del turno está en la primera posición de la lista.
+
+
+Se implementó el patrón Observer para vigilar si algún jugador alcanzaba la norma 6. 
+
+Se implementó el patrón State para conseguir que cada vez que inicia un turno se le sumen cierta cantidad de estrellas a las propias del jugador que inicia el turno.
+
+Los test del controlador apuntan a ser lo más comprensible con solo el nombre de los métodos, aunque el de `stateTest()` llega a ser un poco más complejo. Este
+test primero fija el estado de `State()` para luego pasar al `BeginningState()`, en el que se muestra que aumenta la cantidad de estrellas del jugador dueño del turno.

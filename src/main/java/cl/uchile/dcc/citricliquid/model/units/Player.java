@@ -1,5 +1,7 @@
-package cl.uchile.dcc.citricliquid.model;
+package cl.uchile.dcc.citricliquid.model.units;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 public class Player extends AbstractPlayer implements Ibattle {
   private int normaLevel;
   private int wins;
+
+  private final PropertyChangeSupport normaListener = new PropertyChangeSupport(this);
 
   /**
    * Creates a new player.
@@ -48,6 +52,7 @@ public class Player extends AbstractPlayer implements Ibattle {
   public void normaClear() {
     if (normaLevel <= 5) {
       normaLevel++;
+      normaListener.firePropertyChange("Norma clear", normaLevel - 1, normaLevel);
     }
   }
 
@@ -92,5 +97,14 @@ public class Player extends AbstractPlayer implements Ibattle {
   @Override
   public void receivePlayerAttack(@NotNull Player player) {
     this.receiveDamage(player.getAtk());
+  }
+
+  /**
+   * Adding a listener.
+   *
+   * @param listener the listener.
+   */
+  public void addNormaListener(PropertyChangeListener listener) {
+    normaListener.addPropertyChangeListener(listener);
   }
 }

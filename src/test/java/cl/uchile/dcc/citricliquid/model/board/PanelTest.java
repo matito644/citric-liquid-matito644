@@ -1,6 +1,6 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.*;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,15 +33,15 @@ class PanelTest {
 
   @BeforeEach
   public void setUp() {
+    suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
     testBonusPanel = new BonusPanel();
     testBossPanel = new BossPanel();
     testDropPanel = new DropPanel();
     testEncounterPanel = new EncounterPanel();
-    testHomePanel = new HomePanel();
+    testHomePanel = new HomePanel(suguri);
     testNeutralPanel = new Panel();
     testPanel = new Panel();
     testSeed = new Random().nextLong();
-    suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
   }
 
   @Test
@@ -58,8 +58,8 @@ class PanelTest {
   @Test
   public void nextPanelTest() {
     assertTrue(testNeutralPanel.getNextPanels().isEmpty());
-    final var expectedPanel1 = new Panel(PanelType.NEUTRAL);
-    final var expectedPanel2 = new Panel(PanelType.NEUTRAL);
+    final Ipanel expectedPanel1 = new Panel();
+    final Ipanel expectedPanel2 = new BonusPanel();
 
     testNeutralPanel.addNextPanel(expectedPanel1);
     assertEquals(1, testNeutralPanel.getNextPanels().size());
@@ -69,8 +69,31 @@ class PanelTest {
 
     testNeutralPanel.addNextPanel(expectedPanel2);
     assertEquals(2, testNeutralPanel.getNextPanels().size());
-
     assertEquals(Set.of(expectedPanel1, expectedPanel2),
                  testNeutralPanel.getNextPanels());
+  }
+
+  @Test
+  public void addRemovePlayersTest() {
+    assertTrue(testNeutralPanel.getPlayersHere().isEmpty());
+    final Player holmes = new Player("Sherlock", 5,5,5,5);
+
+    testNeutralPanel.addPlayer(suguri);
+    assertEquals(1, testNeutralPanel.getPlayersHere().size());
+
+    testNeutralPanel.addPlayer(holmes);
+    assertEquals(2, testNeutralPanel.getPlayersHere().size());
+    assertEquals(Set.of(suguri, holmes), testNeutralPanel.getPlayersHere());
+
+    testNeutralPanel.removePlayer(suguri);
+    assertEquals(1, testNeutralPanel.getPlayersHere().size());
+    assertEquals(Set.of(holmes), testNeutralPanel.getPlayersHere());
+  }
+
+  @Test
+  public void neutralActivatedByTest() {
+    Player copyOfSuguri = suguri.copy();
+    testNeutralPanel.activatedBy(suguri);
+    assertEquals(copyOfSuguri, suguri);
   }
 }

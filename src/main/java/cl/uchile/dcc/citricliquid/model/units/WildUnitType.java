@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model;
+package cl.uchile.dcc.citricliquid.model.units;
 
 /**
  * Enum that represents the different wild units.

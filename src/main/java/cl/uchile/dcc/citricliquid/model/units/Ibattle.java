@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model;
+package cl.uchile.dcc.citricliquid.model.units;
 
 /**
  * This interface allows characters to fight with each other.

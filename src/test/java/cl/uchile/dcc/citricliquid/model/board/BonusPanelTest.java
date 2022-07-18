@@ -16,7 +16,7 @@ public class BonusPanelTest extends PanelTest {
     suguri.setSeed(testSeed);
     for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
       final int roll = testRandom.nextInt(6) + 1;
-      BonusPanel.applyBonusTo(suguri);
+      testBonusPanel.activatedBy(suguri);
       expectedStars += roll * Math.min(3, normaLvl);
       assertEquals(expectedStars, suguri.getStars(),
               "Test failed with seed: " + testSeed);

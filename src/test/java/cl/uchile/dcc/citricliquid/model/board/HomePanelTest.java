@@ -43,10 +43,31 @@ public class HomePanelTest extends PanelTest {
     assertEquals(1, suguri.getNormaLevel());
     suguri.increaseStarsBy(10);
     testHomePanel.normaCheck(suguri);
-    System.out.println(suguri.getNormaLevel());
     assertEquals(2, suguri.getNormaLevel());
     suguri.increaseWins(2);
     testHomePanel.normaCheck(suguri);
+    assertEquals(3, suguri.getNormaLevel());
+  }
+
+  @Test
+  public void ownerTest() {
+    assertEquals(suguri, testHomePanel.getOwner());
+  }
+
+  @Test
+  public void homeActivatedByTest() {
+    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
+    assertEquals(1, suguri.getNormaLevel());
+
+    suguri.setCurrentHp(1);
+    suguri.increaseStarsBy(10);
+    testHomePanel.activatedBy(suguri);
+    assertEquals(2, suguri.getCurrentHp());
+    assertEquals(2, suguri.getNormaLevel());
+
+    suguri.increaseWins(2);
+    testHomePanel.activatedBy(suguri);
+    assertEquals(3, suguri.getCurrentHp());
     assertEquals(3, suguri.getNormaLevel());
   }
 

@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model;
+package cl.uchile.dcc.citricliquid.model.units;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

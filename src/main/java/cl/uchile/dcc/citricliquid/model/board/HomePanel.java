@@ -1,14 +1,23 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Class that represents a home panel in the board of the game.
  */
 public class HomePanel extends Panel {
-  public HomePanel() {
+  private final Player owner;
+
+  /**
+   * Creates a Home panel with an owner.
+   *
+   * @param player will be the owner of this panel.
+   */
+  public HomePanel(Player player) {
     super(PanelType.HOME);
+    this.owner = player;
   }
 
   /**
@@ -54,5 +63,40 @@ public class HomePanel extends Panel {
   public void normaCheck(final @NotNull Player player) {
     this.normaCheckStars(player);
     this.normaCheckWins(player);
+  }
+
+  /**
+   * Returns the owner of this panel.
+   */
+  public Player getOwner() {
+    return owner;
+  }
+
+  /**
+   * Restores the hp and executes the norma check process.
+   *
+   * @param player the one who activated the effect.
+   */
+  @Override
+  public void activatedBy(final @NotNull Player player) {
+    applyHealTo(player);
+    normaCheck(player);
+  }
+
+  /**
+   * Now they can be different because of the owner.
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof HomePanel homePanel)) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    return Objects.equals(owner, homePanel.owner);
   }
 }

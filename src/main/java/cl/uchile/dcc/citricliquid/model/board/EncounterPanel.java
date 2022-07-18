@@ -1,8 +1,8 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.Player;
-import cl.uchile.dcc.citricliquid.model.WildUnit;
-import cl.uchile.dcc.citricliquid.model.WildUnitType;
+import cl.uchile.dcc.citricliquid.model.units.Player;
+import cl.uchile.dcc.citricliquid.model.units.WildUnit;
+import cl.uchile.dcc.citricliquid.model.units.WildUnitType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;

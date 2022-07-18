@@ -17,7 +17,7 @@ public class DropPanelTest extends PanelTest {
     suguri.setSeed(testSeed);
     for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
       final int roll = testRandom.nextInt(6) + 1;
-      DropPanel.applyDropTo(suguri);
+      testDropPanel.activatedBy(suguri);
       expectedStars = Math.max(expectedStars - roll * normaLvl, 0);
       assertEquals(expectedStars, suguri.getStars(),
               "Test failed with seed: " + testSeed);
