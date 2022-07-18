@@ -1,85 +1,83 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Class that represents a panel in the board of the game.
- *
- * @author <a href="mailto:ignacio.slater@ug.uchile.cl">Ignacio Slater Muñoz</a>.
- * @version 1.1.222804
- * @since 1.0
+ * Class that represents a neutral panel in the board of the game.
  */
-public class Panel {
+public class Panel implements Ipanel {
   private final PanelType type;
-  private final Set<Panel> nextPanels = new HashSet<>();
+  private final Set<Ipanel> nextPanels = new HashSet<>();
+  private final Set<Player> playersHere = new HashSet<>();
+
+  /**
+   * Creates a panel if no parameters were given.
+   */
+  public Panel() {
+    this(PanelType.NEUTRAL);
+  }
 
   /**
    * Creates a new panel.
    *
    * @param type the type of the panel.
    */
-  public Panel(final PanelType type) {
+  public Panel(PanelType type) {
     this.type = type;
   }
 
-  /**
-   * Restores a player's HP in 1.
-   */
-  private static void applyHealTo(final @NotNull Player player) {
-    player.setCurrentHp(player.getCurrentHp() + 1);
+
+  @Override
+  public Set<Ipanel> getNextPanels() {
+    return Set.copyOf(nextPanels);
   }
 
-  /**
-   * Reduces the player's star count by the D6 roll multiplied by the player's norma level.
-   */
-  private static void applyDropTo(final @NotNull Player player) {
-    player.reduceStarsBy(player.roll() * player.getNormaLevel());
+  @Override
+  public void addNextPanel(final Ipanel panel) {
+    nextPanels.add(panel);
   }
 
-  /**
-   * Reduces the player's star count by the D6 roll multiplied by the maximum between the player's
-   * norma level and three.
-   */
-  private static void applyBonusTo(final @NotNull Player player) {
-    player.increaseStarsBy(player.roll() * Math.min(player.getNormaLevel(), 3));
-  }
-
-  /**
-   * Returns the type of this panel.
-   */
+  @Override
   public PanelType getType() {
     return type;
   }
 
-  /**
-   * Returns a copy of this panel's next ones.
-   */
-  public Set<Panel> getNextPanels() {
-    return Set.copyOf(nextPanels);
+  @Override
+  public Set<Player> getPlayersHere() {
+    return Set.copyOf(playersHere);
+  }
+
+  @Override
+  public void addPlayer(Player player) {
+    playersHere.add(player);
+  }
+
+  @Override
+  public void removePlayer(Player player) {
+    playersHere.remove(player);
   }
 
   /**
-   * Adds a new adjacent panel to this one.
+   * Does nothing because this is a neutral panel.
    *
-   * @param panel the panel to be added.
+   * @param player the one who is on the panel.
    */
-  public void addNextPanel(final Panel panel) {
-    nextPanels.add(panel);
+  @Override
+  public void activatedBy(final @NotNull Player player) {
   }
 
-  /**
-   * Executes the appropriate action to the player according to this panel's type.
-   */
-  public void activatedBy(final Player player) {
-    switch (type) {
-      case BONUS -> applyBonusTo(player);
-      case DROP -> applyDropTo(player);
-      case HOME -> applyHealTo(player);
-      default -> {
-      }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (!(o instanceof Panel panel)) {
+      return false;
+    }
+    return type == panel.type && Objects.equals(nextPanels, panel.nextPanels);
   }
 }
